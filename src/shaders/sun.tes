@@ -1,0 +1,12 @@
+R"zzz(#version 400 core
+layout (triangles) in;
+void main()
+{
+  int n = 0;
+  vec4 accum = vec4(0.0f);
+  for (n = 0; n < 3; n++) {
+    accum += gl_TessCoord[n] * gl_in[n].gl_Position;
+  }
+  gl_Position = vec4(2.0f * normalize(accum.xyz), 1.0);
+}
+)zzz"

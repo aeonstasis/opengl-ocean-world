@@ -1,0 +1,38 @@
+R"zzz(#version 400 core
+layout (vertices = 3) out;
+// Range is 1 to 64
+const float InnerLevel = 1.0f;
+const float OuterLevel = 1.0f;
+uniform vec3 center_position;
+uniform vec3 camera_position;
+in vec3 off[];
+out vec3 offset[];
+
+void main() {
+  // Sets tesselation levels and pass-through offsets
+  offset[gl_InvocationID] = off[gl_InvocationID];
+  gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+  float multiplier = 1.0f;
+  vec2 vert_xz = off[gl_InvocationID].xz;
+  float dist = distance(camera_position.xz, vert_xz);
+  vec2 look = center_position.xz - camera_position.xz;
+  vec2 to_current_point = vert_xz - camera_position.xz;
+  if (dot(look, to_current_point) < 0.0f) {
+    multiplier = 1.0f;
+  } else if (dist <= 20.0f) {
+    multiplier = 4.0f;    //HERE: 16.0f;
+  } else if (dist <= 40.0f) {
+    multiplier = 2.0f;    //HERE: 8.0f;
+  } else if (dist <= 60.0f) {
+    multiplier = 1.0f;    //HERE: 4.0f;
+  } else if (dist <= 70.0f) {
+    multiplier = 1.0f;    //HERE: 2.0f;
+  }
+  if (gl_InvocationID == 0) {
+    gl_TessLevelInner[0] = InnerLevel * multiplier;
+    gl_TessLevelOuter[0] = OuterLevel * multiplier;
+    gl_TessLevelOuter[1] = OuterLevel * multiplier;
+    gl_TessLevelOuter[2] = OuterLevel * multiplier;
+  }
+}
+)zzz"

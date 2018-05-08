@@ -1,0 +1,17 @@
+R"zzz(#version 400 core
+layout (vertices = 3) out;
+// Range is 1 to 64
+const float InnerLevel = 4.0f;
+const float OuterLevel = 4.0f;
+void main()
+{
+  gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+
+  if (gl_InvocationID == 0) {
+    gl_TessLevelInner[0] = InnerLevel;
+    gl_TessLevelOuter[0] = OuterLevel;
+    gl_TessLevelOuter[1] = OuterLevel;
+    gl_TessLevelOuter[2] = OuterLevel;
+  }
+}
+)zzz"

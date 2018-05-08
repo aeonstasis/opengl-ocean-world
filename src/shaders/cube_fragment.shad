@@ -1,0 +1,10 @@
+R"zzz(#version 400 core
+smooth in vec3 eye_direction;
+uniform samplerCube skybox;
+out vec4 fragment_color;
+
+void main()
+{
+  fragment_color = texture(skybox, eye_direction);
+}
+)zzz"
